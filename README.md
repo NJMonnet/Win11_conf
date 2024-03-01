@@ -1,4 +1,4 @@
-# Script de configuration de Windows
+# Script de configuration de Windows 11
 Ce script a pour but de simplifier les installations et
 de permettre aux nouvelles sessions utilisateurs d'être préconfiguré correctement.
 
