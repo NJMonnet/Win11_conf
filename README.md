@@ -13,6 +13,7 @@ de permettre aux nouvelles sessions utilisateurs d'être préconfiguré correcte
 8. Modification Regedit sur l'explorateur de fichier (Parametre d'ouverture 'CE PC')
 9. Désactivation de l'IPv6
 10. Modification des paramètres de la barre de tâche et autres changements pratique sous regedit
+11. Installation des apps voulu avec le Ninite.exe
 
 ## Utilisation du script :
 Il est déconseillé d’exécuter le script sur le bureau du fait qu’il supprime les icônes étant présente à cet endroit.
