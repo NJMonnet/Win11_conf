@@ -78,6 +78,7 @@ try {
 } catch {
     Write-Host "Une erreur s'est produite lors de la modification du Layout du menu de démarrage : $_" -ForegroundColor Red
 }
+stop-process -name explorer –force
 
 # Modification du Layout du menu de démarrage pour les nouveaux utilisateurs
 $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
