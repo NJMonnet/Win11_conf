@@ -1,24 +1,30 @@
 # Script de configuration de Windows 11
-Ce script a pour but de simplifier les installations et
-de permettre aux nouvelles sessions utilisateurs d'être préconfiguré correctement.
+Ce script a pour but de simplifier les installations et de permettre aux nouvelles sessions utilisateurs d'être préconfiguré correctement.
 
-## Le script permet de :
-1. Modification du nom du volume 'C' en 'System'
-2. Suppression des langues indésirable
-3. Modification du layout du menu de demarrage pour les nouveaux utilisateurs et l'utilisateur actuel
-4. Désinstallation des applications indésirable
-5. Installation de .NET Framework 3.5 depuis internet
-6. Suppression des icônes du bureau, exceptées corbeilles et applications spécifiques
-7. Résolution erreur DCOM 'APPID non disponible'
-8. Modification Regedit sur l'explorateur de fichier (Parametre d'ouverture 'CE PC')
-9. Désactivation de l'IPv6
-10. Modification des paramètres de la barre de tâche et autres changements pratique sous regedit
-11. Installation des apps voulu avec le Ninite.exe
+# Prérequis
+Un installation de Windows 11 est necéssaire pour le bon fonctionnement du script 
 
-## Utilisation du script :
-Il est déconseillé d’exécuter le script sur le bureau du fait qu’il supprime les icônes étant présente à cet endroit.
-Lors de l'exécution du script, il ne faut pas se connecter à un compte utilisateur.
-Il est conseillé de faire les mises à jour Windows avant l'exécution du script.
+# Fonctions du script
+* Modification du nom du volume 'C' en 'System'
+* Exécution du fichier Ninite.exe
+* Suppression des layout de clavier non-utilisé
+* Modification du Layout du menu de démarrage pour les nouveaux utilisateurs et l'utilisateur actuel
+* Désinstallation des packages des bloatwares Windows
+* Installation de .NET Framework 3.5 depuis internet
+* Suppression des icônes du bureau, excepté la corbeille
+* Synchronisation de l'horloge
+* Modification des clés de registre pour activer DisableConsumerAccountStateContent et DisableWindowsConsumerFeatures
+* Modification de la clé de registre pour la correction d'erreur DCOM
+* Modification de la clé de registre pour activer l'ouverture de l'explorateur de fichiers sur "Ce PC"
+* Modification de clés de registre pour modifier les paramètres de la barre des tâches
+* Modification de la clé de registre pour désactiver l'IPv6
+* Modification de la clé de registre pour retirer le Microsoft store de la barre des tâches
+* Modification de la clé de registre pour activer le numpad au démarrage
 
-Exécuter cette commande dans une invite de commande Powershell avec les droits administrateur :
-cd emplacement_du_script; Set-ExecutionPolicy Unrestricted; .\Win11_Conf.ps1
+# Utilisation du script :
+Lors de l'exécution du script, il ne faut pas créer de compte utilisateur.
+
+Exemple dans un invite de commande Powershell avec les droits adiministrateur :
+```
+$ cd D:\Ventoy\Win11_Conf_Script; Set-ExecutionPolicy Unrestricted; .\win11conf.ps1
+```
