@@ -24,7 +24,7 @@ Windows 11 installation and an administrator account are required for the script
 # Using the script :
 When running the script, do not create a user account.
 
-Example in a Powershell command prompt with administrator rights:
+Here's how to use the script in a powershell command prompt with administrator rights:
 ```
-$ cd D:\Win11_conf; Set-ExecutionPolicy Unrestricted; .\win11conf.ps1
+$ cd C:\temp\Win11_conf; Set-ExecutionPolicy Unrestricted; .\win11conf.ps1
 ```
