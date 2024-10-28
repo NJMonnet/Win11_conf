@@ -1,8 +1,8 @@
 ﻿<#
 .SYNOPSIS
-  Script de configuration de Windows 11
+  Windows 11 configuration script
 .DESCRIPTION
-  Permets de configurer les sessions Windows 11 de manière à être utilisé dans un environnement professionnel
+  This script is designed to simplify installations and enable new user sessions to be pre-configured correctly for a professional environment.
 .NOTES
   Version:        1.1
   Author:         Monnet
@@ -10,56 +10,56 @@
   https://github.com/NMJLorsal/Win11_conf
 #>
 
-# Affichage du menu de sélection du layout du clavier
-Write-Host "Veuillez sélectionner le layout du clavier :"
+# Display of keyboard layout selection menu
+Write-Host "Please select the keyboard layout :"
 Write-Host "1. fr-CH"
 Write-Host "2. de-CH"
 Write-Host "3. en-US"
-$choice = Read-Host "Entrez le numéro correspondant au layout choisi (1/2/3) :"
+$choice = Read-Host "Enter the number corresponding to the chosen layout (1/2/3) :"
 
 switch ($choice) {
     "1" { $lang = "fr-CH"; $executeLanguageRemoval = $true }
     "2" { $lang = "de-CH"; $executeLanguageRemoval = $true }
     "3" { $lang = "en-US"; $executeLanguageRemoval = $true }
-    default { Write-Host "Choix du layout non valide. Utilisation par défaut de fr-CH."; $lang = "fr-CH"; $executeLanguageRemoval = $true }
+    default { Write-Host "Invalid layout choice. Default use of en-US."; $lang = "en-US"; $executeLanguageRemoval = $true }
 }
 
-# Affichage du message en fonction du layout sélectionné
-Write-Host "Layout sélectionné : $lang"
+# Message display based on selected layout
+Write-Host "Selected layout : $lang"
 
-# Suppression des layouts autres que celui sélectionné
+# Deleting layouts other than the selected one
 if ($executeLanguageRemoval) {
-    Write-Host "Retrait des layouts autres que $lang"
+    Write-Host "Removing layouts other than $lang"
     try {
         Set-WinUserLanguageList -LanguageList $lang -Force
-        Write-Host "Les layouts autres que $lang ont été retirés avec succès." -ForegroundColor Green
+        Write-Host "Layouts other than $lang have been successfully removed." -ForegroundColor Green
     } catch {
-        Write-Host "Une erreur s'est produite lors de la suppression des layouts : $_" -ForegroundColor Red
+        Write-Host "An error occurred when deleting layouts: $_" -ForegroundColor Red
     }
 }
 
-# Modification du nom du volume 'C' en 'System'
-Write-Host "Changement du nom du volume 'C' en 'System'"
+# Change volume name 'C' to 'System
+Write-Host "Change volume name 'C' to 'System"
 try {
     $volume = Get-Volume -DriveLetter "C"
     $volume | Set-Volume -NewFileSystemLabel "System"
-    Write-Host "Le nom du volume C a été modifié avec succès." -ForegroundColor Green
+    Write-Host "Volume C has been successfully renamed." -ForegroundColor Green
 } catch {
-    Write-Host "Une erreur s'est produite lors du changement de nom du volume : $_" -ForegroundColor Red
+    Write-Host "An error occurred when renaming the volume : $_" -ForegroundColor Red
 }
 
-# Exécution du fichier Ninite.exe
+# Running Ninite.exe
 $filePath = ".\Ninite.exe"
-Write-Host "Exécution du fichier Ninite.exe..."
+Write-Host "Running Ninite.exe..."
 $process = Start-Process -FilePath $filePath -PassThru -Verb RunAs
-# Vérification du lancement de l'exécutable
+# Check executable launch
 if ($process -ne $null) {
-    Write-Host "Le fichier Ninite.exe a ete execute avec succès." -ForegroundColor Green
+    Write-Host "Ninite.exe has been executed successfully." -ForegroundColor Green
 } else {
-    Write-Host "Echec de l'exécution du fichier Ninite.exe." -ForegroundColor Red
+    Write-Host "Failed to execute Ninite.exe file." -ForegroundColor Red
 }
 
-# Modification du Layout du menu de démarrage pour l'utilisateur actuel
+# Modifying the start menu layout for the current user
 $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
 $username = (Get-ChildItem Env:\USERNAME).Value
 $destinationPath = "C:\Users\$username\AppData\Local\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState"
@@ -71,16 +71,16 @@ try {
     Copy-Item -Path "$scriptPath\start2.bin" -Destination "$destinationPath\start2.bin" -Force
 
     if (Test-Path -Path "$destinationPath\start2.bin") {
-        Write-Host "Le fichier start2.bin a été copié avec succès vers $destinationPath." -ForegroundColor Green
+        Write-Host "The file start2.bin has been successfully copied to $destinationPath." -ForegroundColor Green
     } else {
-        Write-Host "Une erreur s'est produite lors de la copie du fichier start2.bin." -ForegroundColor Red
+        Write-Host "An error occurred when copying the start2.bin file." -ForegroundColor Red
     }
 } catch {
-    Write-Host "Une erreur s'est produite lors de la modification du Layout du menu de démarrage : $_" -ForegroundColor Red
+    Write-Host "An error occurred when modifying the Start menu layout: $_" -ForegroundColor Red
 }
 stop-process -name explorer –force
 
-# Modification du Layout du menu de démarrage pour les nouveaux utilisateurs
+# Modifying the start menu layout for new users
 $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
 $destinationPath = "C:\Users\default\AppData\Local\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState"
 try {
@@ -91,15 +91,15 @@ try {
     Copy-Item -Path "$scriptPath\start2.bin" -Destination "$destinationPath\start2.bin" -Force
 
     if (Test-Path -Path "$destinationPath\start2.bin") {
-        Write-Host "Le fichier start2.bin a été copié avec succès vers $destinationPath." -ForegroundColor Green
+        Write-Host "The file start2.bin has been successfully copied to $destinationPath." -ForegroundColor Green
     } else {
-        Write-Host "Une erreur s'est produite lors de la copie du fichier start2.bin." -ForegroundColor Red
+        Write-Host "An error occurred when copying the start2.bin file." -ForegroundColor Red
     }
 } catch {
-    Write-Host "Une erreur s'est produite lors de la modification du Layout du menu de démarrage : $_" -ForegroundColor Red
+    Write-Host "An error occurred when modifying the Start menu layout: $_" -ForegroundColor Red
 }
 
-# Désinstallation des packages des bloatwares Windows
+# Uninstalling Windows bloatware packages
 $appNames = @(
     "Microsoft.549981C3F5F10",
     "Clipchamp.Clipchamp",
@@ -127,7 +127,7 @@ $appNames = @(
     "22364Disney.ESPNBetaPWA"
 )
 
-# Désinstallation de chaque application pour tous les utilisateurs
+# Uninstall each application for all users
 foreach ($appName in $appNames) {
     $app = Get-AppxPackage -AllUsers -Name $appName
     if ($null -ne $app) {
@@ -135,32 +135,32 @@ foreach ($appName in $appNames) {
         if ($null -eq (Get-AppxPackage -AllUsers -Name $appName)) {
             Write-Host "$appName désinstallé avec succès." -ForegroundColor Green
         } else {
-            Write-Host "Échec de la désinstallation de $appName." -ForegroundColor Red
+            Write-Host "Failed to uninstall $appName." -ForegroundColor Red
         }
     } else {
-        Write-Host "$appName n'est pas installé."
+        Write-Host "$appName is not installed."
     }
 }
 
-# Installation de .NET Framework 3.5 depuis internet
-Write-Host "Installation de .NET Framework 3.5..."
+# Installing .NET Framework 3.5 from the Internet
+Write-Host "Installing .NET Framework 3.5..."
 Add-WindowsCapability -Online -Name NetFx3~~~~ -Source C:\path\to\cabfile
-Write-Host ".NET Framework 3.5 a été installé avec succès." -ForegroundColor Green
+Write-Host ".NET Framework 3.5 has been successfully installed." -ForegroundColor Green
 
-# Suppression des icônes du bureau, excepté la corbeille
+# Delete all Desktop Public folder icons except the Recycle Bin
 $desktopPath = [Environment]::GetFolderPath("Desktop")
 $desktopItems = Get-ChildItem -Path $desktopPath | Where-Object { $_.Name -ne "Corbeille" }
 foreach ($item in $desktopItems) {
-    Write-Host "Suppression de l'icône $($item.Name)..." -ForegroundColor Green
+    Write-Host "Deleting the icon $($item.Name)..." -ForegroundColor Green
     Remove-Item -Path $item.FullName -Force
 }
 
-# Suppression des icônes du dossier Desktop Public, excepté la Corbeille
+# Delete all Desktop Public folder icons except the Recycle Bin
 try {
     $desktopPath = [Environment]::GetFolderPath("Desktop")
     $desktopItems = Get-ChildItem -Path $desktopPath | Where-Object { $_.Name -ne "Corbeille" }
     foreach ($item in $desktopItems) {
-        Write-Host "Suppression de l'icône $($item.Name)..." -ForegroundColor Green
+        Write-Host "Delete icon $($item.Name)..." -ForegroundColor Green
         Remove-Item -Path $item.FullName -Force
     }
 
@@ -168,25 +168,25 @@ try {
     $publicDesktopPath = [Environment]::GetFolderPath("CommonDesktopDirectory")
     $publicDesktopItems = Get-ChildItem -Path $publicDesktopPath | Where-Object { $_.Name -ne "Corbeille" }
     foreach ($item in $publicDesktopItems) {
-        Write-Host "Suppression de l'icône $($item.Name) du dossier Desktop Public..." -ForegroundColor Green
+        Write-Host "Remove $($item.Name) icon from Desktop Public folder..." -ForegroundColor Green
         Remove-Item -Path $item.FullName -Force
     }
-    Write-Host "Les icônes du bureau et du Desktop Public ont été supprimées avec succès." -ForegroundColor Green
+    Write-Host "Desktop and Desktop Public icons have been successfully removed." -ForegroundColor Green
 } catch {
-    Write-Host "Une erreur s'est produite lors de la suppression des icônes du bureau et du Desktop Public : $_" -ForegroundColor Red
+    Write-Host "An error occurred when deleting the desktop and Desktop Public icons: $_" -ForegroundColor Red
 }
 
-# Synchronisation de l'horloge
-Write-Host "Synchronisation de l'horloge..."
+# Clock synchronization (broken 3/4 of the time)
+Write-Host "Clock synchronization..."
 try {
     w32tm /resync
-    Write-Host "L'horloge a été synchronisée avec succès." -ForegroundColor Green
+    Write-Host "The clock has been successfully synchronized." -ForegroundColor Green
 } catch {
-    Write-Host "Une erreur s'est produite lors de la synchronisation de l'horloge : $_" -ForegroundColor Red
+    Write-Host "An error has occurred during clock synchronization: $_" -ForegroundColor Red
 }
 
-# Déinistallation de OneDrive 
-# Source : https://github.com/asheroto/UninstallOneDrive
+# Uninstalling OneDrive
+# Thanks to : https://github.com/asheroto/UninstallOneDrive
 function Uninstall-OneDrive {
     param (
         [string]$Path
@@ -272,8 +272,8 @@ try {
     exit 1
 }
 
-# Modification regedit
-# Fonction permettant d'afficher les messages en couleur
+# Regedit modification
+# Function to display messages in color
 function Write-ColorMessage {
     param (
         [string]$message,
@@ -282,7 +282,7 @@ function Write-ColorMessage {
     Write-Host $message -ForegroundColor $color
 }
 
-# Fonction permettant de gérer les erreurs
+# Error handling function
 function Handle-Error {
     param (
         [string]$errorMessage
@@ -290,7 +290,7 @@ function Handle-Error {
     Write-ColorMessage "Erreur : $errorMessage" "Red"
 }
 
-# Fonction permettant de mettre à jour une clé de registre
+# Function to update a registry key
 function Update-RegistryKey {
     param (
         [string]$registryPath,
@@ -309,16 +309,16 @@ function Update-RegistryKey {
         }
         $currentValue = Get-ItemProperty -Path $registryPath -Name $valueName
         if ($currentValue.$valueName -eq $newValue) {
-            Write-ColorMessage "La valeur $valueName de la clé de registre a été activée avec succès."
+            Write-ColorMessage "The $valueName value of the registry key has been successfully activated."
         } else {
-            Handle-Error "La valeur $valueName de la clé de registre n'a pas été activée."
+            Handle-Error "The $valueName value of the registry key has not been activated."
         }
     } catch {
         Handle-Error $_.Exception.Message
     }
 }
 
-# Modification des clés de registre pour activer DisableConsumerAccountStateContent, DisableCloudOptimizedContent et DisableWindowsConsumerFeatures
+# Change registry keys to enable DisableConsumerAccountStateContent, DisableCloudOptimizedContent and DisableWindowsConsumerFeatures
 # https://www.tenable.com/audits/items/CIS_MS_Windows_11_Enterprise_Level_1_Bitlocker_v1.0.0.audit:77238250114c3e75f5635582b1a58180
 # https://www.tenable.com/audits/items/CIS_Microsoft_Windows_Server_2019_STIG_v1.0.1_L2_DC.audit:7b0f89b94e066df1285bedb8b6b8876e
 $registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
@@ -341,14 +341,14 @@ try {
     Handle-Error $_.Exception.Message
 }
 
-# Modification de la clé de registre pour la correction d'erreur DCOM, cette clé peut ne pas exister
+# Modification of registry key for DCOM error correction, this key may not exist
 $registryPath = "HKLM:\SYSTEM\CurrentControlSet\Control\WMI\Autologger\EventLog-System\{1b562e86-b7aa-4131-badc-b6f3a001407e}"
 $valueName = "Enabled"
 $newValue = 0
 
 Set-ItemProperty -Path $registryPath -Name $valueName -Value $newValue
 
-# Modification de la clé de registre pour activer l'ouverture de l'explorateur de fichiers sur "Ce PC"
+# Registry key modified to enable file explorer to open on “This PC”.
 $registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
 $registryName = 'LaunchTo'
 $newValue = 1
@@ -357,21 +357,21 @@ try {
     Set-ItemProperty -Path $registryPath -Name $registryName -Value $newValue -ErrorAction Stop
     $currentValue = Get-ItemProperty -Path $registryPath -Name $registryName
     if ($currentValue.$registryName -eq $newValue) {
-        Write-ColorMessage "La valeur de la clé de registre $registryPath\$registryName a été modifiée avec succès."
+        Write-ColorMessage "The registry key $registryPath\$registryName has been successfully modified."
     } else {
-        Handle-Error "La valeur de la clé de registre $registryPath\$registryName n'a pas été modifiée."
+        Handle-Error "The value of the registry key $registryPath\$registryName has not been modified."
     }
 } catch {
     Handle-Error $_.Exception.Message
 }
 
-# Modification de clés de registre pour modifier les paramètres de la barre des tâches
+# Changing registry keys to modify taskbar settings
 reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v "TaskbarMn" /t REG_DWORD /d 0 /f
 reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v "ShowTaskViewButton" /t REG_DWORD /d 0 /f
 reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Search /v "SearchboxTaskbarMode" /t REG_DWORD /d 1 /f
 reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Search /v "SearchboxTaskbarModeCache" /t REG_DWORD /d 1 /f
 
-# Modification de la clé de registre pour retirer "Widgets'" de la barre des tâches
+# Modification of the registry key to remove “Widgets'” from the taskbar
 $registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
 $registryName = 'TaskbarDa'
 $newValue = 0
@@ -380,15 +380,15 @@ try {
     Set-ItemProperty -Path $registryPath -Name $registryName -Value $newValue -ErrorAction Stop
     $currentValue = Get-ItemProperty -Path $registryPath -Name $registryName
     if ($currentValue.$registryName -eq $newValue) {
-        Write-ColorMessage "La valeur de la clé de registre $registryPath\$registryName a été modifiée avec succès."
+        Write-ColorMessage "The registry key $registryPath\$registryName has been successfully modified."
     } else {
-        Handle-Error "La valeur de la clé de registre $registryPath\$registryName n'a pas été modifiée."
+        Handle-Error "The value of the registry key $registryPath\$registryName has not been modified."
     }
 } catch {
     Handle-Error $_.Exception.Message
 }
 
-# Modification de la clé de registre pour désactiver l'IPv6
+# Registry key modification to disable IPv6
 $registryPath = "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters"
 $registryName = 'DisabledComponents'
 $newValue = 255
@@ -397,9 +397,9 @@ try {
     Set-ItemProperty -Path $registryPath -Name $registryName -Value $newValue -ErrorAction Stop
     $currentValue = Get-ItemProperty -Path $registryPath -Name $registryName
     if ($currentValue.$registryName -eq $newValue) {
-        Write-ColorMessage "La valeur de la clé de registre $registryPath\$registryName a été modifiée avec succès."
+        Write-ColorMessage "The registry key $registryPath\$registryName has been successfully modified."
     } else {
-        Handle-Error "La valeur de la clé de registre $registryPath\$registryName n'a pas été modifiée."
+        Handle-Error "The value of the registry key $registryPath\$registryName has not been modified."
     }
 } catch {
     Handle-Error $_.Exception.Message
@@ -418,7 +418,7 @@ try {
      try {
          New-Item -Path $path -Force | Out-Null
          Set-ItemProperty -Path $path -Name $GPOName -Value $GPOValue -Type DWord -ErrorAction Stop
-         Write-ColorMessage "La GPO $path\$GPOName a été activée avec succès."
+         Write-ColorMessage "The $path\$GPOName GPO has been successfully activated."
      } catch {
          Handle-Error $_.Exception.Message
      }
@@ -428,12 +428,12 @@ $registryPath = "HKCU:\Keyboard Layout\Preload"
 
 try {
     Remove-ItemProperty -Path $registryPath -Name "2" -ErrorAction Stop
-    Write-Host "La clé Keyboard $registryPath a été retirée" -ForegroundColor Green
+    Write-Host "The Keyboard $registryPath key has been removed" -ForegroundColor Green
 } catch {
-    Write-Host "La clé Keyboard $registryPath n'existait pas" -ForegroundColor Yellow
+    Write-Host "The Keyboard $registryPath key did not exist" -ForegroundColor Yellow
 }
 
- # Modification de la clé de registre pour activer le numpad au démarrage
+ # Modify registry key to enable numpad at startup
 $registryPath = "Registry::HKU\.DEFAULT\Control Panel\Keyboard"
 $registryName = "InitialKeyboardIndicators"
 $newValue = 2
@@ -442,17 +442,17 @@ try {
     Set-ItemProperty -Path $registryPath -Name $registryName -Value $newValue -ErrorAction Stop
     $currentValue = Get-ItemProperty -Path $registryPath -Name $registryName
     if ($currentValue.$registryName -eq $newValue) {
-        Write-ColorMessage "La valeur de la clé de registre $registryPath\$registryName a été modifiée avec succès."
+        Write-ColorMessage "The registry key $registryPath\$registryName has been successfully modified."
     } else {
-        Handle-Error "La valeur de la clé de registre $registryPath\$registryName n'a pas été modifiée."
+        Handle-Error "The value of the registry key $registryPath\$registryName has not been modified."
     }
 } catch {
     Handle-Error $_.Exception.Message
 }
 
-# Permets de modifier le Registre utilisé par les nouveaux utilisateurs
-# Si une session est créée pendant la modification elle sera corrompue
-# Définition du lecteur HKU:
+# Allows you to modify the registry used by new users
+# If a session is created during modification, it will be corrupted
+# HKU drive definition:
 New-PSDrive -PSProvider Registry -Name HKU -Root HKEY_USERS
 
 $ntuserPath = "C:\Users\Default\NTUSER.DAT"
@@ -465,7 +465,7 @@ if ($null -eq $regHive) {
     $regHive = Get-Item -Path $regHivePath
 }
 
-# Modification de la clé de registre pour activer l'ouverture de l'explorateur de fichiers sur "Ce PC"
+# Registry key modified to enable file explorer to open on “This PC”.
 $registryPath = "HKU:\TempHive\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 $registryName = 'LaunchTo'
 $newValue = 1
@@ -474,21 +474,21 @@ try {
     Set-ItemProperty -Path $registryPath -Name $registryName -Value $newValue -ErrorAction Stop
     $currentValue = Get-ItemProperty -Path $registryPath -Name $registryName
     if ($currentValue.$registryName -eq $newValue) {
-        Write-ColorMessage "La valeur de la clé de registre $registryPath\$registryName a été modifiée avec succès."
+        Write-ColorMessage "The registry key $registryPath\$registryName has been successfully modified."
     } else {
-        Handle-Error "La valeur de la clé de registre $registryPath\$registryName n'a pas été modifiée."
+        Handle-Error "The value of the registry key $registryPath\$registryName has not been modified."
     }
 } catch {
     Handle-Error $_.Exception.Message
 }
 
-# Modification de clés de registre pour modifier les paramètres de la barre des tâches
+# Changing registry keys to modify taskbar settings
 reg add HKU\TempHive\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v "TaskbarMn" /t REG_DWORD /d 0 /f
 reg add HKU\TempHive\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v "ShowTaskViewButton" /t REG_DWORD /d 0 /f
 reg add HKU\TempHive\Software\Microsoft\Windows\CurrentVersion\Search /v "SearchboxTaskbarMode" /t REG_DWORD /d 1 /f
 reg add HKU\TempHive\Software\Microsoft\Windows\CurrentVersion\Search /v "SearchboxTaskbarModeCache" /t REG_DWORD /d 1 /f
 
-# Modification de la clé de registre pour retirer "Widgets'" de la barre des tâches
+# Modification of the registry key to remove “Widgets'” from the taskbar
 $registryPath = "HKU:\TempHive\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
 $registryName = 'TaskbarDa'
 $newValue = 0
@@ -497,9 +497,9 @@ try {
     Set-ItemProperty -Path $registryPath -Name $registryName -Value $newValue -ErrorAction Stop
     $currentValue = Get-ItemProperty -Path $registryPath -Name $registryName
     if ($currentValue.$registryName -eq $newValue) {
-        Write-ColorMessage "La valeur de la clé de registre $registryPath\$registryName a été modifiée avec succès."
+        Write-ColorMessage "The registry key $registryPath\$registryName has been successfully modified."
     } else {
-        Handle-Error "La valeur de la clé de registre $registryPath\$registryName n'a pas été modifiée."
+        Handle-Error "The value of the registry key $registryPath\$registryName has not been modified."
     }
 } catch {
     Handle-Error $_.Exception.Message
@@ -510,12 +510,12 @@ $registryPath = "HKU:\TempHive\Keyboard Layout\Preload"
 
 try {
     Remove-ItemProperty -Path $registryPath -Name "2" -ErrorAction Stop
-    Write-Host "La clé Keyboard $registryPath a été retirée" -ForegroundColor Green
+    Write-Host "The Keyboard $registryPath key has been removede" -ForegroundColor Green
 } catch {
-    Write-Host "La clé Keyboard $registryPath n'existait pas" -ForegroundColor Yellow
+    Write-Host "The Keyboard $registryPath key did not exist" -ForegroundColor Yellow
 }
 
-# Redémarrage de l'ordinateur a la fermeture de Ninite
-Write-Host "Redémarrage de l'ordinateur a la fermeture de Ninite"
+# Restart computer when Ninite is closed
+Write-Host "Restarting the computer when Ninite is closed"
 $process.WaitForExit()
 Restart-Computer -Force
