@@ -6,7 +6,7 @@ Windows 11 installation and an administrator account are required for the script
 
 # Script functions
 * Change volume name 'C' to 'System'
-* Run Ninite.exe file
+* Run Ninite.exe file (Please create your own : https://ninite.com/)
 * Delete unused keyboard layouts
 * Change start menu layout for new and current users
 * Uninstall Windows bloatware packages
