@@ -28,3 +28,4 @@ Here's how to use the script in a powershell command prompt with administrator r
 ```
 $ cd C:\temp\Win11_conf; Set-ExecutionPolicy Unrestricted; .\win11conf.ps1
 ```
+Since I no longer use Windows in my private environment, I only maintain the script for my corporate installations. I apologize in advance if some features are broken or if the French -> English translation went wrong.
