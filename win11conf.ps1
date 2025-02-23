@@ -4,7 +4,7 @@
 .DESCRIPTION
   This script is designed to simplify installations and enable new user sessions to be pre-configured correctly for a professional environment.
 .NOTES
-  Version:        1.2
+  Version:        1.2.1
   Author:         Monnet
 .LINK
   https://github.com/NMJLorsal/Win11_conf
