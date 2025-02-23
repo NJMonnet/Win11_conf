@@ -11,7 +11,6 @@ Windows 11 installation and an administrator account are required for the script
 * Change start menu layout for new and current users
 * Uninstall Windows bloatware packages
 * Install .NET Framework 3.5 from the Internet
-* Removal of desktop icons, except for the Recycle Bin
 * Clock synchronization
 * Registry keys modified to enable DisableConsumerAccountStateContent and DisableWindowsConsumerFeatures
 * Registry key modified for DCOM error correction
