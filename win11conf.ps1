@@ -38,7 +38,7 @@ if ($executeLanguageRemoval) {
     }
 }
 
-# Change volume name 'C' to 'System
+# Change volume name 'C' to 'System'
 Write-Host "Change volume name 'C' to 'System"
 try {
     $volume = Get-Volume -DriveLetter "C"
@@ -146,35 +146,6 @@ foreach ($appName in $appNames) {
 Write-Host "Installing .NET Framework 3.5..."
 Add-WindowsCapability -Online -Name NetFx3~~~~ -Source C:\path\to\cabfile
 Write-Host ".NET Framework 3.5 has been successfully installed." -ForegroundColor Green
-
-# Delete all Desktop Public folder icons except the Recycle Bin
-$desktopPath = [Environment]::GetFolderPath("Desktop")
-$desktopItems = Get-ChildItem -Path $desktopPath | Where-Object { $_.Name -ne "Corbeille" }
-foreach ($item in $desktopItems) {
-    Write-Host "Deleting the icon $($item.Name)..." -ForegroundColor Green
-    Remove-Item -Path $item.FullName -Force
-}
-
-# Delete all Desktop Public folder icons except the Recycle Bin
-try {
-    $desktopPath = [Environment]::GetFolderPath("Desktop")
-    $desktopItems = Get-ChildItem -Path $desktopPath | Where-Object { $_.Name -ne "Corbeille" }
-    foreach ($item in $desktopItems) {
-        Write-Host "Delete icon $($item.Name)..." -ForegroundColor Green
-        Remove-Item -Path $item.FullName -Force
-    }
-
-    # Suppression des icônes du dossier Desktop Public, excepté la Corbeille
-    $publicDesktopPath = [Environment]::GetFolderPath("CommonDesktopDirectory")
-    $publicDesktopItems = Get-ChildItem -Path $publicDesktopPath | Where-Object { $_.Name -ne "Corbeille" }
-    foreach ($item in $publicDesktopItems) {
-        Write-Host "Remove $($item.Name) icon from Desktop Public folder..." -ForegroundColor Green
-        Remove-Item -Path $item.FullName -Force
-    }
-    Write-Host "Desktop and Desktop Public icons have been successfully removed." -ForegroundColor Green
-} catch {
-    Write-Host "An error occurred when deleting the desktop and Desktop Public icons: $_" -ForegroundColor Red
-}
 
 # Clock synchronization (broken 3/4 of the time)
 Write-Host "Clock synchronization..."
